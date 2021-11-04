@@ -1,10 +1,80 @@
 import os
+import re
 
 import cv2
 import numpy as np
 import pandas as pd
 
 from Scripts.Experiments import RESULTS
+
+
+# ------------------------------------------------------------------------------------------------------------------ #
+# -------------------------------------------------- Restructure UNBC Data ----------------------------------------- #
+
+
+def get_user_number(folder_name):
+    regex = r"\d+(?=-)"
+
+    matches = re.findall(regex, folder_name)
+
+    try:
+        return int(matches[0])
+    except:
+        return ""
+
+
+def get_frame_number(filename):
+    regex = r"\d+(?=.png)"
+
+    matches = re.findall(regex, filename)
+
+    try:
+        return int(matches[0])
+    except:
+        return ""
+
+
+def get_session_id(filename):
+    regex = r"\S+(?=\d{3}.png)"
+
+    matches = re.findall(regex, filename)
+
+    try:
+        return matches[0]
+    except:
+        return ""
+
+
+def get_user_number_from_filename(filename):
+    regex = r"\d{3}(?=t)"
+
+    matches = re.findall(regex, filename)
+
+    try:
+        return int(matches[0])
+    except:
+        return ""
+
+
+def read_pain_score_from_file(filepath):
+    try:
+        h = open(filepath, 'r')
+        content = h.readlines()
+        for line in content:
+            return int(float(line.rstrip('\n')))
+    except:
+        return ""
+
+
+def get_filename_without_extension(filename):
+    regex = r"\S+\d{3}"
+
+    matches = re.findall(regex, filename)
+
+    try:
+        return matches[0]
+    except:
+        return ""
 
 
 # ------------------------------------------------------------------------------------------------------------------ #
@@ -102,7 +172,7 @@ def get_image_paths(root_path, ext='.jpg'):
     return image_paths
 
 
-def get_labels(image_paths, label_type=None, ext='.jpg'):
+def get_labels(image_paths, label_type=None, ext='.png'):
     """
     Utility function turning image paths into a 2D list of labels
 
@@ -182,6 +252,7 @@ def create_pain_df(path, pain_gap=(), binarize=True):
     if binarize:
         df['Pain'] = np.minimum(df['Pain'], 1)
     return df
+
 
 # ------------------------------------------------ End Load Pain Data ---------------------------------------------- #
 # ------------------------------------------------------------------------------------------------------------------ #
@@ -487,6 +558,7 @@ def split_and_balance_df(df, ratio, balance_test=False):
 
     # Return shuffled dfs
     return df_train.sample(frac=1), df_test.sample(frac=1)
+
 
 # ------------------------------------------- End Data Balancing algorithms ---------------------------------------- #
 # ------------------------------------------------------------------------------------------------------------------ #

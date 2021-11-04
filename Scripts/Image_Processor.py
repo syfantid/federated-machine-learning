@@ -38,7 +38,7 @@ def bulk_process_images(inputpath, outputpath, extension):
                 dest = os.path.join(structure, file)
                 img = load_and_preprocess_image(src)
                 cv2.imwrite(dest, img)
-
+    return filenames
 
 def bulk_augment_images(input_path, output_path, extension, augmentation, label_type, label_threshold=-1):
     """
@@ -57,7 +57,7 @@ def bulk_augment_images(input_path, output_path, extension, augmentation, label_
         for file in filenames:
             if file.endswith(extension):
                 src = os.path.join(dir_path, file)
-                label = get_labels([src], label_type)[0]
+                label = get_labels([src], label_type, extension)[0]
                 if label > label_threshold:
                     img = cv2.imread(src, 0)
                     f_name, f_ext = os.path.splitext(file)
