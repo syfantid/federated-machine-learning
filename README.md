@@ -41,7 +41,7 @@ out-of-the-box, create the following folders
 - Data/Preprocessed Data/
 - Data/Augmented Data/
 
-and move the images into the "Raw Data" folder.
+and move the images into the "Raw Data" folder with the following naming convention ```43_0_0_0_2.jpg```, where the numbers refer to [person, session, culture, frame, pain_level].
 
 Alternatively, you should be able to run the following commands from
 the project's root directory:
@@ -69,10 +69,13 @@ If you use this code for your own research, please reference it using the follow
 
 ## How to run this code
 ### Data Pre-Processing
+If your images do not follow the naming convention described above (the original UNBC dataset does not), i.e., ```43_0_0_0_2.jpg```, then:
+1. Navigate to federated-machine-learning/Notebooks and run the notebook "input_restructuring.ipynb"
+2. "Run All",  and the naming convention will be applied.
+
 First, you will need to pre-process the image data.
 1. Navigate to federated-machine-learning/Notebooks and run the notebook "Data Pre-Processing.ipynb"
-2. "Run All",  and the pre-processing steps "histogram equalization" and "image flipping", and "image rotation/cropping"
-will be applied.
+2. "Run All",  and the pre-processing steps "histogram equalization" and "image flipping", and "image rotation/cropping" will be applied.
 
 ### Running Experiments
 #### Shell scripts
