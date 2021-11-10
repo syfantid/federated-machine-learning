@@ -230,7 +230,7 @@ def create_pain_df(path, pain_gap=(), binarize=True):
     """
 
     # Get image paths and convert file labels to numpy array
-    img_paths = np.array(get_image_paths(path))
+    img_paths = np.array(get_image_paths(path, ext=".png"))
     labels = np.array(get_labels(img_paths))
 
     # Create dataframe

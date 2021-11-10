@@ -252,11 +252,15 @@ def rotate_and_crop_image(img, degrees):
         Cropped image
     """
     image_rotated = rotate_image(img, degrees)
+    # return crop_around_center(
+    #     image_rotated,
+    #     *largest_rotated_rect(
+    #         img.shape[0],
+    #         img.shape[1],
+    #         math.radians(degrees)
+    #     )
     return crop_around_center(
         image_rotated,
-        *largest_rotated_rect(
-            img.shape[0],
-            img.shape[1],
-            math.radians(degrees)
-        )
+        215,
+        215
     )
