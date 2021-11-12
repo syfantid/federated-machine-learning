@@ -30,15 +30,15 @@ from Scripts.Keras_Custom import focal_loss
 # ------------------------------------------------------ Paths ----------------------------------------------------- #
 
 ROOT = os.path.dirname(os.path.dirname(__file__))
-RESULTS = os.path.join(ROOT, 'Results')
+RESULTS = os.path.normpath(os.path.join(ROOT, 'Results'))
 
-MODELS = os.path.join(ROOT, 'Models')
-CENTRAL_PAIN_MODELS = os.path.join(MODELS, "Pain", "Centralized")
-FEDERATED_PAIN_MODELS = os.path.join(MODELS, "Pain", "Federated")
+MODELS = os.path.normpath(os.path.join(ROOT, 'Models'))
+CENTRAL_PAIN_MODELS = os.path.normpath(os.path.join(MODELS, "Pain", "Centralized"))
+FEDERATED_PAIN_MODELS = os.path.normpath(os.path.join(MODELS, "Pain", "Federated"))
 
-DATA = os.path.join(ROOT, "Data", "Augmented Data")
-GROUP_1_PATH = os.path.join(DATA, "group_1")
-GROUP_2_PATH = os.path.join(DATA, "group_2")
+DATA = os.path.normpath(os.path.join(ROOT, "Data", "Augmented Data"))
+GROUP_1_PATH = os.path.normpath(os.path.join(DATA, "group_1"))
+GROUP_2_PATH = os.path.normpath(os.path.join(DATA, "group_2"))
 
 
 # ---------------------------------------------------- End Paths --------------------------------------------------- #
@@ -697,6 +697,9 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
     # Setup SMS Client
     twilio = Twilio(args.sms_acc, args.sms_pw, args.sender, args.receiver)
 
+    # epochs
+    epochs = 2
+
     # Setup Google Cloud API
     g_monitor = GoogleCloudMonitor(project=args.project, zone=args.zone, instance=args.instance)
 
@@ -730,7 +733,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='1-unbalanced-Centralized-no-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=None,
@@ -753,7 +756,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='2-unbalanced-Centralized-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=None,
@@ -775,7 +778,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='3-unbalanced-Federated-no-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=None,
@@ -799,7 +802,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='4-unbalanced-Federated-central-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=find_newest_model_path(CENTRAL_PAIN_MODELS, "shard-0.00.h5"),
@@ -823,7 +826,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='5-unbalanced-Federated-federated-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=None,
@@ -847,7 +850,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='6-unbalanced-Federated-no-pre-training-personalization' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=None,
@@ -871,7 +874,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='7-unbalanced-Federated-central-pre-training-personalization' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=find_newest_model_path(CENTRAL_PAIN_MODELS, "shard-0.00.h5"),
@@ -896,7 +899,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             experiment='8-unbalanced-Federated-federated-pre-training-personalization' + "_" + str(
                                 seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=find_newest_model_path(FEDERATED_PAIN_MODELS, "shard-0.00.h5"),
@@ -920,7 +923,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='9-unbalanced-Federated-no-pre-training-local-models' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=None,
@@ -944,7 +947,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='10-unbalanced-Federated-central-pre-training-local-models' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=find_newest_model_path(CENTRAL_PAIN_MODELS, "shard-0.00.h5"),
@@ -968,7 +971,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='11-unbalanced-Federated-federated-pre-training-local-models' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=False,
                             model_path=find_newest_model_path(FEDERATED_PAIN_MODELS, "shard-0.00.h5"),
@@ -995,7 +998,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='1-unbalanced-Centralized-no-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=None,
@@ -1018,7 +1021,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='2-unbalanced-Centralized-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=None,
@@ -1040,7 +1043,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='3-unbalanced-Federated-no-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=None,
@@ -1064,7 +1067,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='4-unbalanced-Federated-central-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=find_newest_model_path(CENTRAL_PAIN_MODELS, "shard-0.00.h5"),
@@ -1088,7 +1091,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='5-unbalanced-Federated-federated-pre-training' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=None,
@@ -1112,7 +1115,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='6-unbalanced-Federated-no-pre-training-personalization' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=None,
@@ -1137,7 +1140,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             experiment='7-unbalanced-Federated-central-pre-training-personalization' + "_" + str(
                                 seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=find_newest_model_path(CENTRAL_PAIN_MODELS, "shard-0.00.h5"),
@@ -1162,7 +1165,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             experiment='8-unbalanced-Federated-federated-pre-training-personalization' + "_" + str(
                                 seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=find_newest_model_path(FEDERATED_PAIN_MODELS, "shard-0.00.h5"),
@@ -1186,7 +1189,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='9-unbalanced-Federated-no-pre-training-local-models' + "_" + str(seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=None,
@@ -1211,7 +1214,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             experiment='10-unbalanced-Federated-central-pre-training-local-models' + "_" + str(
                                 seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=find_newest_model_path(CENTRAL_PAIN_MODELS, "shard-0.00.h5"),
@@ -1236,7 +1239,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             experiment='11-unbalanced-Federated-federated-pre-training-local-models' + "_" + str(
                                 seed),
                             setting='shards',
-                            rounds=30,
+                            rounds=epochs,
                             shards=test_shards,
                             balance_test_set=True,
                             model_path=find_newest_model_path(FEDERATED_PAIN_MODELS, "shard-0.00.h5"),
@@ -1284,7 +1287,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='2-sessions-Centralized-pre-training' + "_" + str(seed),
                             setting='sessions',
-                            rounds=30,
+                            rounds=epochs,
                             shards=None,
                             model_path=None,
                             pretraining='centralized',
@@ -1329,7 +1332,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='4-sessions-Federated-central-pre-training' + "_" + str(seed),
                             setting='sessions',
-                            rounds=30,
+                            rounds=epochs,
                             shards=None,
                             model_path=find_newest_model_path(CENTRAL_PAIN_MODELS, "shard-0.00.h5"),
                             pretraining='centralized',
@@ -1398,7 +1401,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='7-sessions-Federated-central-pre-training-personalization' + "_" + str(seed),
                             setting='sessions',
-                            rounds=30,
+                            rounds=epochs,
                             shards=None,
                             model_path=find_newest_model_path(CENTRAL_PAIN_MODELS, "shard-0.00.h5"),
                             pretraining='centralized',
@@ -1467,7 +1470,7 @@ def main(seed=123, shards_unbalanced=False, shards_balanced=False, sessions=Fals
                             dataset='PAIN',
                             experiment='10-sessions-Federated-central-pre-training-local-models' + "_" + str(seed),
                             setting='sessions',
-                            rounds=30,
+                            rounds=epochs,
                             shards=None,
                             model_path=find_newest_model_path(CENTRAL_PAIN_MODELS, "shard-0.00.h5"),
                             pretraining='centralized',
